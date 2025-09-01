@@ -97,6 +97,7 @@ int main()
     print_table(process_list, n);
     printf("\nAverage Waiting Time: %.2f", avg_waiting_time);
     printf("\nAverage Turnaround Time: %.2f\n", avg_turnaround_time);
+    printf ("This program was executed by Parth Poudyal 1317");
 
     free(process_list);
 
