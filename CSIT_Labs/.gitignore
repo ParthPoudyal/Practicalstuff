@@ -1,0 +1,38 @@
+# Ignore Windows executables
+*.exe
+*.dll
+
+# Ignore Linux/Mac executables
+*.out
+*.so
+*.dylib
+
+# Ignore object & compiled files
+*.o
+*.obj
+*.lo
+*.la
+
+# Ignore static libraries
+*.lib
+*.a
+
+# Ignore debug/release folders (common in C/C++ builds)
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+[Bb]in/
+[Dd]ist/
+
+# Ignore IDE-generated stuff (optional, but useful)
+*.log
+*.user
+*.suo
+*.pdb
+*.idb
+*.cache
+*.tmp
+*.swp
+
+#env files
+*.env
