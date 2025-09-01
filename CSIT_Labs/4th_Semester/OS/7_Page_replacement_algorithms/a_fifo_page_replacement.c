@@ -32,7 +32,7 @@ void printFrames(int frames[], int n)
 
 void fifo(int pages[], int n, int capacity)
 {
-    int frames[capacity];
+    int frames[50]; // Use a fixed size for portability
     int faults = 0;
     int nextFrame = 0; // Index of the next frame to be replaced
 
@@ -76,7 +76,6 @@ void fifo(int pages[], int n, int capacity)
     printf("\n");
     printf("Total Page Faults: %d\n", faults);
     printf("Page Fault Rate: %.3f\n", (float)faults / n);
-    printf("\n ");
     printf("Total Page hits: %d\n", n - faults);
     printf("Page Hit Rate: %.3f\n", (float)(n - faults) / n);
 }
@@ -88,27 +87,27 @@ int main()
 
     // Input the number of page requests
     printf("Enter the number of page requests: ");
-    scanf("%d", &n);
-
-    if (n <= 0)
+    if (scanf("%d", &n) != 1 || n <= 0)
     {
         printf("Error: Invalid number of page requests.\n");
         return 0;
     }
 
     // Input the page requests
-    int pages[n];
+    int pages[50]; // Use a fixed size for portability
     printf("Enter the page requests: ");
     for (int i = 0; i < n; i++)
     {
-        scanf("%d", &pages[i]);
+        if (scanf("%d", &pages[i]) != 1)
+        {
+            printf("Error: Invalid page request input.\n");
+            return 0;
+        }
     }
 
     // Input the capacity of the frame
     printf("Enter the capacity of the frame: ");
-    scanf("%d", &capacity);
-
-    if (capacity <= 0)
+    if (scanf("%d", &capacity) != 1 || capacity <= 0 || capacity > 50)
     {
         printf("Error: Invalid capacity.\n");
         return 0;
@@ -116,6 +115,6 @@ int main()
 
     // Simulate FIFO page replacement algorithm
     fifo(pages, n, capacity);
-
+    printf("This program was executed by Parth Poudyal 1317\n");
     return 0;
 }
