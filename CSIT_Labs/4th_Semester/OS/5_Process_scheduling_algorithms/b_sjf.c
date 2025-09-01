@@ -71,6 +71,6 @@ int main()
 
     printf("\n");
     print_average_times(tat, wt, n);
-
+    printf ("This program was executed by Parth Poudyal 1317");
     return 0;
 }

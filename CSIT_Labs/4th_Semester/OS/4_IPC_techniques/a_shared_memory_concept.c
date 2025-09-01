@@ -1,66 +1,89 @@
-// note run in linux
+// Note: Run in Linux
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <sys/ipc.h>
-#include <sys/shm.h>
+#include <sys/msg.h>
+#include <stdlib.h>
 
-// create a file named shmfile in the same directory as this file
+#define MAX 10
 
-#define SHM_SIZE 1024 // size of shared memory segment
+// Structure for message queue
+struct mesg_buffer
+{
+    long mesg_type;
+    char mesg_text[100];
+} message;
+
+key_t key;
+int msgid;
+
+void sendmsg(key_t key)
+{
+    // msgget creates a message queue and returns identifier
+    msgid = msgget(key, 0666 | IPC_CREAT); // 0666 is permission
+    if (msgid == -1)
+    {
+        perror("msgget");
+        exit(EXIT_FAILURE);
+    }
+
+    message.mesg_type = 1;
+
+    printf("Write Data: ");
+    fgets(message.mesg_text, MAX, stdin);
+
+    // msgsnd to send message
+    if (msgsnd(msgid, &message, sizeof(message.mesg_text), 0) == -1)
+    {
+        perror("msgsnd");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Data sent is: %s\n", message.mesg_text);
+}
+
+void getmsg()
+{
+    // msgrcv to receive message
+    if (msgrcv(msgid, &message, sizeof(message.mesg_text), 1, 0) == -1)
+    {
+        perror("msgrcv");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Data received is: %s\n", message.mesg_text);
+
+    // Destroy the message queue
+    if (msgctl(msgid, IPC_RMID, NULL) == -1)
+    {
+        perror("msgctl");
+        exit(EXIT_FAILURE);
+    }
+}
 
 int main()
 {
-    int shmid;
-    key_t key;
-    char *shm_ptr;
+    // Ensure the file exists before calling ftok
+    FILE *file = fopen("progfile", "a"); // create if not exists
+    if (file == NULL)
+    {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    fclose(file);
 
-    // Generate a unique key for the shared memory segment
-    key = ftok("shmfile", 'R');
+    // ftok to generate unique key
+    key = ftok("progfile", 65);
     if (key == -1)
     {
         perror("ftok");
         exit(EXIT_FAILURE);
     }
 
-    // Create a new shared memory segment
-    shmid = shmget(key, SHM_SIZE, 0666 | IPC_CREAT);
-    if (shmid == -1)
-    {
-        perror("shmget");
-        exit(EXIT_FAILURE);
-    }
+    sendmsg(key);
+    getmsg();
 
-    // Attach the shared memory segment to the process's address space
-    shm_ptr = (char *)shmat(shmid, NULL, 0);
-    if (shm_ptr == (char *)-1)
-    {
-        perror("shmat");
-        exit(EXIT_FAILURE);
-    }
-
-    // Write some data to the shared memory segment
-    sprintf(shm_ptr, "Hello, shared memory!");
-
-    // Detach the shared memory segment from the process's address space
-    shmdt(shm_ptr);
-
-    // Re-attach the shared memory segment to read the data
-    shm_ptr = (char *)shmat(shmid, NULL, SHM_RDONLY);
-    if (shm_ptr == (char *)-1)
-    {
-        perror("shmat");
-        exit(EXIT_FAILURE);
-    }
-
-    // Read the data from the shared memory segment
-    printf("Data read from shared memory: %s\n", shm_ptr);
-
-    // Detach the shared memory segment from the process's address space
-    shmdt(shm_ptr);
-
-    // Delete the shared memory segment
-    shmctl(shmid, IPC_RMID, NULL);
+    printf("This code was executed by Parth Poudyal\n");
 
     return 0;
 }

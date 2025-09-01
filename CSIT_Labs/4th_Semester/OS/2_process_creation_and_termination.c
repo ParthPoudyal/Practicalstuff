@@ -32,6 +32,6 @@ int main()
         wait(&status); // wait for child process to terminate
         printf("Child process with PID %d has terminated with status %d\n", pid, WEXITSTATUS(status));
     }
-
+    printf("This project was done by Parth Poudyal 1317");
     return 0;
 }

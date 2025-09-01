@@ -124,4 +124,5 @@ int main()
 
     printf("\nAverage waiting time     : %f", wait_time_total);
     printf("\nAverage turn around time : %f\n", tat);
+    printf ("This program was executed by Parth Poudyal 1317");
 }

@@ -52,6 +52,6 @@ int main()
     key = ftok("progfile", 65);
     sendmsg(key);
     getmsg();
-
+    printf ("this code was executed by Parth Poudyal")
     return 0;
 }

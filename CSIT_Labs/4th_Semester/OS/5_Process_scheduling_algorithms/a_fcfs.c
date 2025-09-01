@@ -64,6 +64,6 @@ int main()
 
     print_table(p, at, bt, ct, tat, wt, n);
     print_gantt_chart(at, ct, p, n);
-
+    printf ("This program was executed by Parth Poudyal 1317");
     return 0;
 }
