@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string.h>
-#include <set>
 using namespace std;
 
 int main()
@@ -32,8 +31,21 @@ int main()
     }
 
     // Check if string is a keyword
-    set<string> keywords = {"auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "int", "long", "register", "return", "short", "signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while"};
-    if (keywords.find(str) != keywords.end())
+    const char* keywords[] = {
+        "auto", "break", "case", "char", "const", "continue", "default", "do", "double",
+        "else", "enum", "extern", "float", "for", "goto", "if", "int", "long", "register",
+        "return", "short", "signed", "sizeof", "static", "struct", "switch", "typedef",
+        "union", "unsigned", "void", "volatile", "while"
+    };
+    int num_keywords = sizeof(keywords) / sizeof(keywords[0]);
+    bool is_keyword = false;
+    for (int k = 0; k < num_keywords; k++) {
+        if (strcmp(str, keywords[k]) == 0) {
+            is_keyword = true;
+            break;
+        }
+    }
+    if (is_keyword)
     {
         cout << "Keyword" << endl;
     }

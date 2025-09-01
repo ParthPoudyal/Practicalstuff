@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string.h>
-#include <set>
 using namespace std;
 
 int main()
@@ -39,17 +38,22 @@ int main()
     cout << endl;
 
     cout << "Substring: ";
-    set<string> unique_substrings; // Use a set to keep track of unique substrings
+    string unique_substrings[5050]; // Maximum possible substrings for 100 chars: n(n+1)/2
+    int unique_count = 0;
     for (n = 0; n < l; n++)
     {
         for (o = n; o < l; o++)
         {
-            // Extract substring using string.substr() function
             string sub = string(str).substr(n, o - n + 1); // (start, length) of substring
-            // Check if substring has already been generated
-            if (unique_substrings.find(sub) == unique_substrings.end())
-            {
-                unique_substrings.insert(sub);
+            bool found = false;
+            for (int idx = 0; idx < unique_count; idx++) {
+                if (unique_substrings[idx] == sub) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                unique_substrings[unique_count++] = sub;
                 cout << sub << " ";
             }
         }
